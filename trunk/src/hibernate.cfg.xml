@@ -1,0 +1,40 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.connection.url">
+			jdbc:mysql://127.0.0.1:3306/sie
+		</property>
+		<property name="hibernate.connection.driver_class">
+			com.mysql.jdbc.Driver
+		</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">prova</property>
+		<property name="hibernate.dialect">
+			org.hibernate.dialect.MySQLInnoDBDialect
+		</property>
+		<property name="hbm2ddl.auto"> update </property>
+		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.format_sql">false</property>
+		<property name="hibernate."></property>
+
+		<property name="hibernate.query.substitutions">true 'Y', false 'N'</property>
+
+		<!-- "Import" the mapping resources here -->
+		<mapping resource="sie/db/entity/mapping/Change.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/CodeComment.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/Field.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/Import.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/Issue.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/IssueAttachment.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/IssueComment.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/Method.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/MethodParameter.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/Project.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/SourceContainer.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/SType.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/Variable.hbm.xml" />
+		<mapping resource="sie/db/entity/mapping/ChangedResource.hbm.xml" />
+	</session-factory>
+</hibernate-configuration>

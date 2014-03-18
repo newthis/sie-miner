@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+
+	<class name="Method" table="methods">
+		<id name="id" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="name" column="name"/>
+		<property name="linesCount" column="lines_number" />
+		<property name="constructor" column="is_constructor" type="yes_no" />
+
+		<one-to-one name="belongingClass" class="sie.db.entity.SType" foreign-key="belonging_type"/>
+		<one-to-one name="returnType" class="sie.db.entity.SType" foreign-key="return_type" />
+
+		<set name="catchedException" table="catched_exceptions" inverse="true"
+			lazy="true" fetch="select" cascade="all">
+			<key column="method" />
+			<many-to-many entity-name="sie.db.entity.SType">
+				<column name="exception_type" />
+			</many-to-many>
+		</set>
+
+		<set name="throwedException" table="throwed_exceptions" inverse="true"
+			lazy="true" fetch="select">
+			<key column="method" />
+			<many-to-many entity-name="sie.db.entity.SType">
+				<column name="exception_type" />
+			</many-to-many>
+		</set>
+
+		<set name="usedInstanceVariables" table="used_fields" inverse="true"
+			lazy="true" fetch="select" cascade="all">
+			<key column="method" />
+			<many-to-many entity-name="sie.db.entity.Field">
+				<column name="used_field" />
+			</many-to-many>
+		</set>
+
+		<set name="extRefToThis" table="method_invocations" inverse="true"
+			lazy="true" fetch="select">
+			<key column="invoker_method" />
+			<many-to-many entity-name="sie.db.entity.Method">
+				<column name="invoked_method" />
+			</many-to-many>
+		</set>
+
+		<set name="methodCalls" table="method_invocations" inverse="true"
+			lazy="true" fetch="select">
+			<key column="invoked_method" />
+			<many-to-many entity-name="sie.db.entity.Method">
+				<column name="invoker_method" />
+			</many-to-many>
+		</set>
+
+		<set name="parameters" table="parameters" inverse="true" lazy="true"
+			fetch="select">
+			<key>
+				<column name="belonging_method" not-null="true" /> <!-- id of the parameter -->
+			</key>
+			<one-to-many class="sie.db.entity.MethodParameter" />
+		</set>
+
+		<set name="localVariables" table="local_variables" inverse="true"
+			lazy="true" fetch="select">
+			<key>
+				<column name="belonging_method" not-null="true" /> <!-- id of the variable -->
+			</key>
+			<one-to-many class="sie.db.entity.Variable" />
+		</set>
+
+		<set name="comments" table="method_comments" cascade="all">
+			<key>
+				<column name="method"></column>
+			</key>
+			<one-to-many class="sie.db.entity.CodeComment" />
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+
+	<class name="Issue" table="issues">
+		<id name="id" column="id">
+			<generator class="native" />
+		</id>
+
+		<property name="type" column="type" />
+		<property name="priority" column="priority" />
+		<property name="status" column="status" />
+		<property name="resolution" column="resolution" />
+		<property name="affectedVersion" column="affected_version" />
+		<property name="fixVersion" column="fix_version" />
+		<property name="component" column="component" />
+		<property name="assignee" column="assignee" />
+		<property name="reporter" column="reporter" />
+		<property name="created" column="created" />
+		<property name="updated" column="updated" />
+		<property name="closed" column="closed" />
+
+		<set name="attach" table="issue_attachments" inverse="true" lazy="true"
+			fetch="select" cascade="all">
+			<key>
+				<column name="belonging_issue" not-null="true" /> <!-- id of the attachment -->
+			</key>
+			<one-to-many class="sie.db.entity.IssueAttachment" />
+		</set>
+
+		<set name="comments" table="issue_comments" inverse="true" lazy="true"
+			fetch="select" cascade="all">
+			<key>
+				<column name="belonging_issue" not-null="true" /> <!-- id of the comment -->
+			</key>
+			<one-to-many class="sie.db.entity.IssueComment" />
+		</set>
+	</class>
+</hibernate-mapping>

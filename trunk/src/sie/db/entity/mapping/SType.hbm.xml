@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+
+	<joined-subclass name="SType" extends="Import" table="types">
+		<key column="import_id" />
+
+		<property name="numLinee" column="lines_number" />
+		<property name="interf" column="is_interface" type="yes_no" />
+		<property name="srcPath" column="src_file_location"/>
+		<property name="headerFile" column="header_file_location"/>
+		
+		<set name="externalRefToThis" table="class_invocations" inverse="true"
+			lazy="true" fetch="select" cascade="all">
+			<key column="invoker_class" />
+			<many-to-many entity-name="sie.db.entity.SType">
+				<column name="invoked_class" />
+			</many-to-many>
+		</set>
+
+		<set name="classiInvocate" table="class_invocations" inverse="true"
+			lazy="true" fetch="select" cascade="all">
+			<key column="invoked_class" />
+			<many-to-many entity-name="sie.db.entity.SType">
+				<column name="invoker_class" />
+			</many-to-many>
+		</set>
+
+		<set name="instanceVariables" table="field" cascade="all">
+			<key>
+				<column name="owner_type" />
+			</key>
+			<one-to-many class="sie.db.entity.Field" />
+		</set>
+
+		<set name="imported" table="imports" inverse="true" lazy="true"
+			cascade="all">
+			<key column="importer" />
+			<many-to-many entity-name="sie.db.entity.Import" column="imported" />
+		</set>
+
+		<set name="methods" table="methods" inverse="true" lazy="true"
+			fetch="select" where="is_constructor = 'N'" cascade="all">
+			<key>
+				<column name="belonging_type" not-null="true" />
+			</key>
+			<one-to-many class="sie.db.entity.Method" />
+		</set>
+
+		<set name="constructors" table="methods_constructors" inverse="true"
+			lazy="true" where="is_constructor = 'Y'" cascade="all">
+			<key column="type" />
+			<one-to-many class="sie.db.entity.Method" />
+		</set>
+
+		<set name="comments" table="comments" inverse="true" lazy="true"
+			fetch="select" cascade="all">
+			<key>
+				<column name="belonging_type" not-null="true" />
+			</key>
+			<one-to-many class="sie.db.entity.CodeComment" />
+		</set>
+
+		<set name="superclasses" table="extends" inverse="true" lazy="true"
+			cascade="all">
+			<key column="subclass" />
+			<many-to-many entity-name="sie.db.entity.SType">
+				<column name="superclass" />
+			</many-to-many>
+		</set>
+
+		<one-to-one name="belongingPackage" foreign-key="source_container"
+			class="SourceContainer" />
+
+	</joined-subclass>
+</hibernate-mapping>
