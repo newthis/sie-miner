@@ -17,5 +17,5 @@ echo "<root>" > ../log.xml
 
 git log --pretty=format:"<entry><hash>%h</hash><name>%an</name><email>%ae</email><date>%cd</date><message>%B</message></entry>"  --date=local  --date-order --reverse >> ../log.xml
 # crea xml
-echo "</root>" >> ../log.xml # append
+echo -e "\n</root>" >> ../log.xml # append
 exit 0

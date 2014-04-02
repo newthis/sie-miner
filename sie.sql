@@ -357,6 +357,23 @@ CREATE TABLE IF NOT EXISTS `projects` (
 -- --------------------------------------------------------
 
 --
+-- Struttura della tabella `reviews`
+--
+
+CREATE TABLE IF NOT EXISTS `reviews` (
+  `versioning_url` varchar(255) NOT NULL,
+  `name_app` varchar(150) NOT NULL,
+  `author` varchar(150) NOT NULL,
+  `title` varchar(150) NOT NULL,
+  `review` varchar(800) NOT NULL,
+  `rating` varchar(5) NOT NULL,
+  `date` varchar(20) NOT NULL,
+  UNIQUE KEY `name_app` (`name_app`,`author`,`date`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Struttura della tabella `source_containers`
 --
 
