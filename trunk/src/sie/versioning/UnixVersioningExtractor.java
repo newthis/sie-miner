@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -95,7 +93,7 @@ public abstract class UnixVersioningExtractor implements VersioningExtractor {
 		File xml = new File(LOG_XML);
 
 		clearFile(xml);
-		
+
 		DocumentBuilder builder = DocumentBuilderFactory.newInstance()
 				.newDocumentBuilder();
 		Document doc = builder.parse(xml);
@@ -117,22 +115,37 @@ public abstract class UnixVersioningExtractor implements VersioningExtractor {
 		}
 		logger.info("Change creation completated, " + res.size() + " elements");
 	}
-	
+
 	private static File clearFile(File xml) throws IOException {
 		File tmpFile = new File("tmp.xml");
-		BufferedReader r = new BufferedReader(new InputStreamReader(new FileInputStream(xml)));
+		BufferedReader r = new BufferedReader(new InputStreamReader(
+				new FileInputStream(xml)));
 		PrintWriter w = new PrintWriter(tmpFile);
+		w.println("<root>");
 		String line = null;
 		String tmp = "";
-		while((line = r.readLine()) != null) {
-			if(line.startsWith("<entry>")) {
-				tmp = line;
-			} else {
-				tmp += line;
-				String res = clearLine(tmp);
-				w.println(res);;
+		while ((line = r.readLine()) != null) {
+			if (line.isEmpty() || line.equals("<root>")) {
+				continue;
+			}
+			if (line.equals("<\root>")) {
+				System.out.println("end");
+				break;
+			}
+			if (!(line.isEmpty() || line.equals("<root>"))) {
+				if (line.startsWith("<entry>")) {
+					tmp = line;
+				} else {
+					tmp += line;
+				}
+				if (tmp.endsWith("</entry>")) {
+					String res = clearLine(tmp);
+					if (res != null)
+						w.println(res);
+				}
 			}
 		}
+		w.println("</root>");
 		r.close();
 		w.close();
 		xml.delete();
@@ -141,23 +154,22 @@ public abstract class UnixVersioningExtractor implements VersioningExtractor {
 	}
 
 	private static String clearLine(String tmp) {
-		if(tmp.contains("<root>") || tmp.contains("</root>"))
-			return tmp;
 		String newLine = "";
 		int startMsg = tmp.lastIndexOf("<message>") + "<message>".length();
 		int stopMsg = tmp.lastIndexOf("</message>");
-		
-		if(stopMsg < 0 || startMsg < 0)
+
+		if (stopMsg < 0 || startMsg < 0)
 			return null;
-		
+
 		String message = tmp.substring(startMsg, stopMsg);
-		
-		message = message.replaceAll("&", "and").replaceAll("<", "-").replaceAll(">", "-");
-		
+
+		message = message.replaceAll("&", "and").replaceAll("<", "-")
+				.replaceAll(">", "-");
+
 		newLine = tmp.substring(0, startMsg);
 		newLine += message;
 		newLine += tmp.substring(stopMsg);
-		
+
 		return newLine;
 	}
 

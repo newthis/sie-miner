@@ -17,7 +17,7 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 	 * 
 	 * @param url
 	 *            l'url del repository.
-	 * @throws IOException 
+	 * @throws IOException
 	 * */
 	@Override
 	protected void init(String url) throws IOException {
@@ -38,7 +38,7 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 				throw new IOException(getErrorMessage(p));
 		} catch (InterruptedException e) {
 			logger.severe(e.getMessage());
-		} 
+		}
 	}
 
 	/**
@@ -70,83 +70,30 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 	 * */
 	@Override
 	protected void extractChanges() throws IOException {
-		BufferedReader reader = null;
-
+		String s = null;
 		if (res.size() == 0) {
-			logger.info("no changes founded");
+			logger.info("No changes founded");
 			return;
-		}  //Commentata perchè il primo commit in alcuni casi è molto grande 
-			//rallenta troppo.
-		/*else if (res.size() == 1) {
-			logger.info("only one change found");
-			Change cb = res.get(0);
+		}
+		if (res.size() == 1) {
+			logger.info("Only one change founded");
+		}
+		for (int i = 1; i < res.size(); i++) {
+			Change cb1 = res.get(i - 1);
+			Change cb2 = res.get(i);
 			try {
-				reader = execChangesScript(cb);
+				logger.info("For commits: " + cb1.getHash() + "(" + (i - 1)
+						+ ")" + " - " + cb2.getHash() + "(" + i + ")");
+				s = getDiff(cb1, cb2);
 			} catch (InterruptedException e) {
 				logger.severe(e.getMessage());
+				e.printStackTrace();
 			}
-			getChangesInSnap(reader, cb);
-			reader.close();
-			
-
-		} else {
-			// Get first snap
-
-			Change cb = res.get(0);
-
-			/*try {
-				reader = execChangesScript(cb);
-			} catch (InterruptedException e) {
-				logger.severe(e.getMessage());
-			}
-			getChangesInSnap(reader, cb);
-			reader.close();
-			 */
-			for (int i = 1; i < res.size(); i++) {
-				Change cb1 = res.get(i - 1);
-				Change cb2 = res.get(i);
-				try {
-					logger.info("For commits: " + (i - 1) + " - " + i);
-					reader = execChangesScript(cb1, cb2);
-				} catch (InterruptedException e) {
-					logger.severe(e.getMessage());
-					e.printStackTrace();
-				}
-				getChangesInSnap(reader, cb2);
-				reader.close();
-			}
+			getChangesInSnap(s, cb2);
+			s = null;
 		}
-	//}
-
-	/**
-	 * Prende in input un singolo cambiamento ed esegue lo script
-	 * git_get_changes.sh per estrarne le modifiche a grana fine.
-	 * 
-	 * @param cb
-	 *            è il cambiamento di cui andare a calcolare le modifiche a
-	 *            grana fine.
-	 * @return il reader restituito dal processo in cui è stato eseguito lo
-	 *         script. Contiene il risultato dell'esecuzione.
-	 * */
-/*	private BufferedReader execChangesScript(Change cb) throws IOException,
-			InterruptedException {
-		logger.info("Executing script for get changes");
-
-		ProcessBuilder pb = new ProcessBuilder(GET_CHANGES_SCRIPT, cb.getHash());
-		Process pr = pb.start();
-		pr.waitFor();
-
-		if (pr.exitValue() != 0) {
-			throw new IOException(getErrorMessage(pr));
-		}
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				pr.getInputStream()));
-		logger.info("script execution success");
-
-		return reader;
 	}
-*/
+
 	/**
 	 * Prende in input due cambiamenti ed esegue lo script git_get_changes.sh
 	 * per estrarne le modifiche a grana fine tra l'uno e l'altro.
@@ -156,68 +103,69 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 	 * @param cb2
 	 *            è il cambiamento da confrontare con cb1 per estrarne le
 	 *            modifiche.
-	 * @return il reader restituito dal processo in cui è stato eseguito lo
-	 *         script. Contiene il risultato dell'esecuzione.
+	 * @return una stringa cotenente il diff tra cb1 e cb2.
 	 * */
-	private BufferedReader execChangesScript(Change cb1, Change cb2)
-			throws IOException, InterruptedException {
+	private String getDiff(Change cb1, Change cb2) throws IOException,
+			InterruptedException {
 		logger.info("Executing script for get changes");
 		ProcessBuilder pb = new ProcessBuilder(GET_CHANGES_SCRIPT,
 				cb1.getHash(), cb2.getHash());
 		Process pr = pb.start();
+		StreamGobbler output = new StreamGobbler(pr.getInputStream());
+		output.start();
 		pr.waitFor();
+
 		if (pr.exitValue() != 0) {
 			throw new IOException(getErrorMessage(pr));
 		}
-		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				pr.getInputStream()));
+
 		logger.info("script execution success");
-		return reader;
+		return output.getDiff();
 	}
 
 	/**
-	 * Calcola le modifiche a grana fine per un singolo change, dato l'output
+	 * Estrae le modifiche a grana fine per un singolo change, dato l'output
 	 * dello script git_get_changes.sh.
 	 * 
 	 * @param r
-	 *            è il reader contenente l'output dello script
-	 *            git_get_canges.sh.
+	 *            è la stringa contenente il diff tra il change cb e il commit
+	 *            precedente
 	 * @param cb
 	 *            è il ChangeBean in cui andare ad inserire le modifiche a grana
 	 *            fine individuate.
 	 * @throws IOException
 	 *             se la lettura del reader r fallisce.
 	 * */
-	private void getChangesInSnap(BufferedReader r, Change cb)
-			throws IOException {
-		logger.info("get changed files from " + cb.getId());
-		String line;
+	private void getChangesInSnap(String r, Change cb) throws IOException {
+		logger.info("get changed files from " + cb.getHash());
+		String[] lines = r.split("\n");
 		Set<ChangedResource> toRet = new HashSet<>();
 		String fileName = "";
 		ChangedResource newRes = null;
-		while ((line = r.readLine()) != null) {
-			line = line.replaceAll("\\+|\\-", "").trim();
-			if (line.startsWith("index")) { // Trovato nome file
-				fileName = r.readLine();
-				
+		for (int i = 0; i < lines.length; i++) {
+			lines[i] = lines[i].replaceAll("\\+|\\-", "").trim();
+			if (lines[i].startsWith("index") && i < lines.length - 1) { // Trovato nome file
+				fileName = lines[++i];
 				/*
 				 * Quando si cancella un file da git sembra che lo metta a
 				 * /dev/null
 				 */
-				while (fileName.contains("/dev/null"))
-					fileName = r.readLine();
+				while (fileName.contains("/dev/null") && i < lines.length - 1)
+					fileName = lines[++i];
 				// Elimino dal path il branch
-				fileName = fileName.substring(fileName.indexOf("/"));
+				int index = fileName.indexOf("/");
+				if(index >= 0)
+					fileName = fileName.substring(index);
 				newRes = new ChangedResource();
 				newRes.setFileName(fileName);
 				toRet.add(newRes);
 			} else { // cerco un metodo
-				if (testLine(line)) {	//metodo trovato
-					if(newRes.getModifiedMethods() == null) {
+				if (testLine(lines[i])) { // metodo trovato
+					if (newRes.getModifiedMethods() == null) {
 						newRes.setModifiedMethods(new HashSet<String>());
 					}
-					String methodName = line.substring(0,
-							line.lastIndexOf(")") + 1);
+					String methodName = lines[i].substring(0,
+							lines[i].lastIndexOf(")") + 1);
 					newRes.getModifiedMethods().add(methodName);
 				}
 			}
@@ -233,6 +181,8 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 	private static boolean testLine(String s) {
 		if (s.startsWith("}"))
 			return false;
+		if(s.startsWith("//") || s.startsWith("/*") || s.startsWith("*"))
+			return false;
 		if (!s.contains("(") || !s.contains("{"))
 			return false;
 		if (s.contains(" class "))
@@ -243,7 +193,12 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 		if (s.contains("."))
 			return false;
 
-		s = s.substring(s.indexOf("("), s.indexOf(")"));
+		int open = s.indexOf("(");
+		int close = s.indexOf(")");
+		if(open < 0 || close < 0)
+			return false;
+		
+		s = s.substring(open, close);
 		if (s.length() > 1 && !s.contains(" "))
 			return false;
 		return true;
