@@ -42,8 +42,8 @@ public class ProjectManager {
 		DAOHibernate dao = DAOHibernate.getInstance();
 		Session s = dao.getSession();
 		Query q = s
-				.createQuery("select from Project as proj where proj.name = :name");
-		q.setParameter(":name", name);
+				.createQuery("from Project as proj where proj.name = :name");
+		q.setParameter("name", name);
 		return q;
 	}
 }

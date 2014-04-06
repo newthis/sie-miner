@@ -23,19 +23,16 @@ public class GitTester {
 		VersioningExtractor ext = UnixVersioningExtractorsFactory.getFactory()
 				.getGitExtractor();
 		ChangeManager m = new ChangeManager();
-		/*
-		 * Collection<Change> c = m.getByProjectId(2);
-		 * System.out.println(c.size()); for(Change c1 : c) {
-		 * System.out.println(m.getModifiedResource(c1, new JavaFIleFilter()));
-		 * }
-		 */
+
 		try {
 
-			String url = "https://github.com/BrandroidTools/OpenExplorer.git";
+			// String url =
+			// "https://github.com/BrandroidTools/OpenExplorer.git";
+			String url = "https://github.com/apache/subversion.git/";
 			Collection<Change> c = ext.extract(url);
 			Project p = new Project("test");
 			p.setVersioningUrl(url);
-			//m.save(c, p);
+			m.save(c, p);
 			System.out.println("Done");
 
 		} catch (MalformedURLException e) {

@@ -144,7 +144,9 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 		ChangedResource newRes = null;
 		for (int i = 0; i < lines.length; i++) {
 			lines[i] = lines[i].replaceAll("\\+|\\-", "").trim();
-			if (lines[i].startsWith("index") && i < lines.length - 1) { // Trovato nome file
+			if (lines[i].startsWith("index") && i < lines.length - 1) { // Trovato
+																		// nome
+																		// file
 				fileName = lines[++i];
 				/*
 				 * Quando si cancella un file da git sembra che lo metta a
@@ -154,7 +156,7 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 					fileName = lines[++i];
 				// Elimino dal path il branch
 				int index = fileName.indexOf("/");
-				if(index >= 0)
+				if (index >= 0)
 					fileName = fileName.substring(index);
 				newRes = new ChangedResource();
 				newRes.setFileName(fileName);
@@ -181,7 +183,7 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 	private static boolean testLine(String s) {
 		if (s.startsWith("}"))
 			return false;
-		if(s.startsWith("//") || s.startsWith("/*") || s.startsWith("*"))
+		if (s.startsWith("//") || s.startsWith("/*") || s.startsWith("*"))
 			return false;
 		if (!s.contains("(") || !s.contains("{"))
 			return false;
@@ -195,9 +197,12 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 
 		int open = s.indexOf("(");
 		int close = s.indexOf(")");
-		if(open < 0 || close < 0)
+		if (open < 0 || close < 0)
 			return false;
-		
+
+		if (close < open)
+			return false;
+
 		s = s.substring(open, close);
 		if (s.length() > 1 && !s.contains(" "))
 			return false;
