@@ -26,5 +26,42 @@
          </action>
       </actionSet>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="SIE.category1"
+            name="JavaExtractor">
+      </category>
+      <command
+            id="SIE.command1"
+            name="JavaExtractorCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="sie.snippets.MetricExtractorSnippet"
+            commandId="SIE.handler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            contextId="org.eclipse.ui.contexts.window"
+            schemeId="SIE.key1"
+            sequence="SIE.key1">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+      </menuContribution>
+      <menuContribution
+            allPopups="false"
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+      </menuContribution>
+   </extension>
 
 </plugin>
