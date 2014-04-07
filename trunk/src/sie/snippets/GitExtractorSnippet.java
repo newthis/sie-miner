@@ -1,13 +1,15 @@
-package sie.versioning;
+package sie.snippets;
 
 import java.io.IOException;
+
+import sie.versioning.UnixGitExtractor;
 
 public class GitExtractorSnippet {
 
 	public static void main(String args[]) {
 		UnixGitExtractor extractor = new UnixGitExtractor();
 		try {
-			extractor.init("https://github.com/apache/subversion.git/");
+			extractor.extract("https://github.com/apache/subversion.git/");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

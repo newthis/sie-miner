@@ -1,9 +1,10 @@
-package sie.bugtracking;
+package sie.snippets;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
+import sie.bugtracking.BugzillaHttpExtractor;
 import sie.db.entity.Issue;
 
 public class BugExtractorSnippet {
