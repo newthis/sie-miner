@@ -31,8 +31,9 @@ public class Project {
 	}
 
 	public void setChanges(Set<Change> changes) {
-		for(Change c : changes)
-			c.setProject(this);
+		if (changes != null)
+			for (Change c : changes)
+				c.setProject(this);
 		this.changes = changes;
 	}
 
