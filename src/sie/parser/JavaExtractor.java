@@ -70,7 +70,7 @@ public class JavaExtractor implements CodeExtractor {
 
 		project.setContainers(packages);
 		
-		Set<SType> listClasses= null;
+		Set<SType> listClasses= new HashSet<>();
 		for(SourceContainer s : packages){
 			listClasses.addAll(s.getClasses());
 		}
