@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS `changes` (
 CREATE TABLE IF NOT EXISTS `changes_for_commit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `change_hash` int(11) DEFAULT NULL,
-  `modified_file` varchar(255) DEFAULT NULL,
+  `modified_file` varchar(1024) DEFAULT NULL,
    PRIMARY KEY (`id`),
    KEY `change_hash_fk1` (`change_hash`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `changes_for_commit` (
 
 CREATE TABLE IF NOT EXISTS `methods_change_in_commit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `modified_method` varchar(255) DEFAULT NULL,
+  `modified_method` varchar(1024) DEFAULT NULL,
   `proprietary_file` int(11) DEFAULT NULL,
    PRIMARY KEY (`id`),
    KEY `file_changed_fk` (`proprietary_file`)
