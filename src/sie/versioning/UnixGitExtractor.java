@@ -180,8 +180,10 @@ public class UnixGitExtractor extends UnixVersioningExtractor {
 	 * Verifica se la riga analizzata è la dichiarazione di un metodo (al
 	 * momento funziona solo con i linguaggi c-like)
 	 * */
+	
+	//TODO Al posto di questo metodo ci vorrebbe una bella regEx...
 	private static boolean testLine(String s) {
-		if (s.startsWith("}"))
+		if (s.startsWith("}") || s.startsWith("{"))
 			return false;
 		if (s.startsWith("//") || s.startsWith("/*") || s.startsWith("*"))
 			return false;
