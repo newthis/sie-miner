@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+	<class name="Change" table="changes">
+
+		<id name="id" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="hash" column="hash" />
+		<property name="data" type="date" column="commit_date" />
+		<property name="email" column="dev_mail" />
+		<property name="devId" column="dev_id" />
+		<property name="commitMsg" column="message" />
+
+		<many-to-one name="project" class="sie.db.entity.Project" />
+
+		<set name="modifiedMethods" table="changes_for_commit" lazy="true"
+			cascade="all">
+			<key column="change_hash" />
+			<one-to-many class="sie.db.entity.ChangedResource"/>
+		</set>
+	</class>
+</hibernate-mapping>

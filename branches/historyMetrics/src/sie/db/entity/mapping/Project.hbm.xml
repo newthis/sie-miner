@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+	<class name="Project" table="projects">
+		<id name="id" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="name" column="name" />
+		<property name="versioningUrl" column="versioning_url" />
+		<property name="bugtrackerUrl" column="bugtracker_url" />
+		
+		<set name="containers" table="source_containers" inverse="true"
+			lazy="true" fetch="select" cascade="all">
+			<key>
+				<column name="project"></column>
+			</key>
+
+			<one-to-many class="sie.db.entity.SourceContainer" />
+		</set>
+
+		<set name="issues" table="issue" inverse="true" lazy="true" fetch="select"
+			cascade="all">
+			<key>
+				<column name="project"></column>
+			</key>
+			<one-to-many class="sie.db.entity.Issue" />
+		</set>
+
+		<set name="changes" table="changes" lazy="true"
+			fetch="select" cascade="all">
+			<key>
+				<column name="project" ></column>
+			</key>
+			<one-to-many class="sie.db.entity.Change" />
+		</set>
+	</class>
+</hibernate-mapping>

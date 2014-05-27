@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+	<class name="Variable" table="local_variables">
+		<id name="id" column="id">
+		</id>
+
+		<property name="name" column="name" />
+		<property name="initialization" column="initialization" />
+
+		<one-to-one name="type" class="sie.db.entity.SType"
+			cascade="save-update" foreign-key="variable_type"></one-to-one>
+	</class>
+</hibernate-mapping>

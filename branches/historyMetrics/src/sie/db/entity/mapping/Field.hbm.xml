@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="sie.db.entity">
+
+	<class name="Field" table="fields">
+		<id name="id" column="id">
+			<generator class="native"></generator>
+		</id>
+
+		<property name="name" column="name" />
+		<property name="visibility" column="visibility" />
+
+		<one-to-one name="type" class="sie.db.entity.SType" fetch="select"
+			foreign-key="variable_type" cascade="all">
+		</one-to-one>
+		
+		<one-to-one name="owner" class="sie.db.entity.SType" fetch="select"
+			foreign-key="owner_type" cascade="all">		
+		</one-to-one>
+		
+		<set name="comments" table="field_comments" inverse="true" lazy="true"
+			fetch="select" cascade="all">
+			<key column="field" />
+			<one-to-many class="sie.db.entity.CodeComment" />
+		</set>
+
+	</class>
+</hibernate-mapping>
