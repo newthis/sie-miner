@@ -1,10 +1,12 @@
 package sie.metrics;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import sie.db.entity.Change;
 import sie.db.entity.ChangedResource;
+import sie.db.entity.SType;
 import sie.db.entity.SourceContainer;
 
 public class PackageMetrics {
@@ -22,7 +24,8 @@ public class PackageMetrics {
 		Set<Change> projectChanges = pSourceContainer.getProject().getChanges();
 		Set<Change> packageChanges = new HashSet<Change>();
 		for (Change projectChange : projectChanges) {
-			Set<ChangedResource> modifiedMethods = projectChange.getModifiedMethods();
+			Set<ChangedResource> modifiedMethods = projectChange
+					.getModifiedMethods();
 		}
 		return -1;
 	}
@@ -90,9 +93,28 @@ public class PackageMetrics {
 	 *            The package.
 	 * @return The calculated metric.
 	 */
-	public static float getChangeSetSize(SourceContainer pSourceContainer) {
-		// TODO
-		return -1;
+	public static float getChangeSetSize(SourceContainer pSourceContainer,
+			Collection<Change> pChanges) {
+		int sum = 0;
+		Set<String> modifiedFiles = new HashSet<>();
+		for (Change change : pChanges) {
+			for (ChangedResource changedResource : change.getModifiedMethods()) {
+				if (!modifiedFiles.contains(changedResource.getFileName())) {
+					modifiedFiles.add(changedResource.getFileName());
+				}
+			}
+		}
+		Set<SType> classes = pSourceContainer.getClasses();
+		for (SType sType : classes) {
+			for (String modifiedFilename : modifiedFiles) {
+				String sTypeFilename = sType.getSrcPath();
+				int start = sTypeFilename.indexOf("/");
+				String newFilename = sTypeFilename.substring(start - 1);
+				if (newFilename.equals(modifiedFilename)) {
+					sum += sType.getNumLinee();
+				}
+			}
+		}
+		return sum / modifiedFiles.size();
 	}
-
 }
