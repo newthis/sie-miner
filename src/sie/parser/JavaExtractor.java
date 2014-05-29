@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 
 import sie.db.DAOHibernate;
+import sie.db.ProjectManager;
 import sie.db.entity.SType;
 import sie.db.entity.Method;
 import sie.db.entity.SourceContainer;
@@ -28,6 +29,7 @@ import sie.parser.cache.MethodCache;
 import sie.parser.cache.PackageCache;
 import sie.parser.java.ClassMetricManager;
 import sie.parser.java.PackageExtractor;
+import sie.parser.java.PackageMetricManager;
 import sie.parser.java.helper.Env;
 import sie.parser.java.helper.Finder;
 import sie.parser.java.searchengine.ClassSearchRequestor;
@@ -77,17 +79,13 @@ public class JavaExtractor implements CodeExtractor {
 		
 		calculateMetrics(listClasses);
 		
-
-		try {
-			dao.beginTransaction();
-			dao.getSession().save(project);
-			dao.commitTransation();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		// TODO controllo se il progetto ha i dati storici di git
+		if(true) {
+			// si, li ha.
+			calculatePackageMetrics(packages);
 		}
-
-		dao.close();
+		
+		ProjectManager.saveOrUpdate(project);
 
 		setExternalRef(packages);
 		clearCache();
@@ -109,6 +107,12 @@ public class JavaExtractor implements CodeExtractor {
 			ClassMetricManager.DIT(st, listClasses, 0);
 			ClassMetricManager.NOO(st, listClasses);
 			ClassMetricManager.SumCCBC(st, listClasses);
+		}
+	}
+	
+	private void calculatePackageMetrics(Set<SourceContainer> listPackages) {
+		for (SourceContainer sourceContainer : listPackages) {
+			PackageMetricManager.MEAN_NCHANGE(sourceContainer);
 		}
 	}
 
