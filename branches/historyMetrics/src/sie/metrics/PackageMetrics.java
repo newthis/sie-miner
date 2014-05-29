@@ -1,17 +1,13 @@
 package sie.metrics;
 
-import sie.db.entity.Project;
+import java.util.HashSet;
+import java.util.Set;
+
+import sie.db.entity.Change;
+import sie.db.entity.ChangedResource;
 import sie.db.entity.SourceContainer;
 
 public class PackageMetrics {
-
-	public static int getNumberOfRevision(Project pProject) {
-		if (pProject.getChanges() != null) {
-			return pProject.getChanges().size();
-		} else {
-			return -1;
-		}
-	}
 
 	/**
 	 * This method calculates the mean_NCHANGE metric. This metric represents
@@ -23,7 +19,11 @@ public class PackageMetrics {
 	 * @return The calculated metric.
 	 */
 	public static float getMeanNumberOfChanges(SourceContainer pSourceContainer) {
-		// TODO
+		Set<Change> projectChanges = pSourceContainer.getProject().getChanges();
+		Set<Change> packageChanges = new HashSet<Change>();
+		for (Change projectChange : projectChanges) {
+			Set<ChangedResource> modifiedMethods = projectChange.getModifiedMethods();
+		}
 		return -1;
 	}
 
