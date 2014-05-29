@@ -24,6 +24,15 @@
                toolbarPath="sampleGroup"
                id="sie2.actions.SampleAction">
          </action>
+         <action
+               label="&amp;History Metrics Action"
+               icon="icons/sample.gif"
+               class="sie.actions.HistoryMetricsAction"
+               tooltip="Calculate history metrics"
+               menubarPath="sampleMenu/sampleGroup"
+               toolbarPath="sampleGroup"
+               id="sie2.actions.HistoryMetricsAction">
+         </action>
       </actionSet>
    </extension>
    <extension
