@@ -4,9 +4,10 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping package="sie.db.entity">
-	<joined-subclass name="SourceContainer" extends="Import" table="source_containers">
-	<key column="import_id"/>
-		
+	<joined-subclass name="SourceContainer" extends="Import"
+		table="source_containers">
+		<key column="import_id" />
+
 		<property name="numLines" column="lines_number" />
 		<set name="classes" table="types" inverse="true" lazy="true"
 			fetch="select" cascade="all">
@@ -15,6 +16,7 @@
 			</key>
 			<one-to-many class="sie.db.entity.SType" />
 		</set>
-
+		<many-to-one name="project" class="sie.db.entity.Project"
+			column="project" cascade="all" not-null="true" />
 	</joined-subclass>
 </hibernate-mapping>

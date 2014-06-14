@@ -18,7 +18,7 @@ public class DAOHibernate {
 	}
 
 	public Session getSession() {
-		if (session == null) {
+		if (session == null || !session.isOpen()) {
 			session = sessionFactory.openSession();
 		}
 		return session;

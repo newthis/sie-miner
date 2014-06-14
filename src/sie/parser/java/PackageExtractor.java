@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.core.*;
 
+import sie.db.entity.Project;
 import sie.db.entity.SType;
 import sie.db.entity.SourceContainer;
 import sie.parser.cache.BeanCache;
@@ -13,7 +14,7 @@ import sie.parser.utils.Name;
 
 public class PackageExtractor {
 
-	public static SourceContainer parse(IPackageFragment ipf)
+	public static SourceContainer parse(IPackageFragment ipf, Project project)
 			throws JavaModelException {
 
 		if (ipf.getCorrespondingResource() == null)
@@ -56,6 +57,7 @@ public class PackageExtractor {
 
 		pb.setClasses(classi);
 		pb.setNumLines(numLinee);
+		pb.setProject(project);
 
 		pc.put(n, pb, true);
 		return pb;
