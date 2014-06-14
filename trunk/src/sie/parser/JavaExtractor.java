@@ -63,7 +63,7 @@ public class JavaExtractor implements CodeExtractor {
 			return;
 		}
 		for (IPackageFragment cu : c) {
-			SourceContainer pkg = PackageExtractor.parse(cu);
+			SourceContainer pkg = PackageExtractor.parse(cu, project);
 			if (pkg != null)
 				packages.add(pkg);
 		}
@@ -75,7 +75,7 @@ public class JavaExtractor implements CodeExtractor {
 			listClasses.addAll(s.getClasses());
 		}
 		
-		calculateMetrics(listClasses);
+		//calculateMetrics(listClasses);
 		
 
 		try {

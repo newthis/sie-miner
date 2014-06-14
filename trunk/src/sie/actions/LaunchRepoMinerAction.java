@@ -22,14 +22,14 @@ import sie.parser.EclipseExtractorFactory;
  * 
  * @see IWorkbenchWindowActionDelegate
  */
-public class SampleAction implements IWorkbenchWindowActionDelegate {
+public class LaunchRepoMinerAction implements IWorkbenchWindowActionDelegate {
 	@SuppressWarnings("unused")
 	private IWorkbenchWindow window;
 
 	/**
 	 * The constructor.
 	 */
-	public SampleAction() {
+	public LaunchRepoMinerAction() {
 	}
 
 	/**

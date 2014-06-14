@@ -13,13 +13,13 @@
 		<property name="srcPath" column="src_file_location"/>
 		<property name="headerFile" column="header_file_location"/>
 		
-		<set name="externalRefToThis" table="class_invocations" inverse="true"
+		<!-- <set name="externalRefToThis" table="class_invocations" inverse="true"
 			lazy="true" fetch="select" cascade="all">
 			<key column="invoker_class" />
 			<many-to-many entity-name="sie.db.entity.SType">
 				<column name="invoked_class" />
 			</many-to-many>
-		</set>
+		</set> -->
 
 		<set name="classiInvocate" table="class_invocations" inverse="true"
 			lazy="true" fetch="select" cascade="all">
