@@ -18,7 +18,7 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.search.IJavaSearchConstants;
 
-import sie.db.DAOHibernate;
+import sie.db.STypeManager;
 import sie.db.entity.SType;
 import sie.db.entity.Method;
 import sie.db.entity.SourceContainer;
@@ -50,7 +50,6 @@ public class JavaExtractor implements CodeExtractor {
 	 * */
 	@Override
 	public void extractCode(String projName) throws CoreException {
-		DAOHibernate dao = DAOHibernate.getInstance();
 		Set<SourceContainer> packages = new HashSet<>();
 		Project project = new Project();
 		project.setName(projName);
@@ -69,33 +68,24 @@ public class JavaExtractor implements CodeExtractor {
 		}
 
 		project.setContainers(packages);
-		
-		Set<SType> listClasses= new HashSet<>();
-		for(SourceContainer s : packages){
+
+		Set<SType> listClasses = new HashSet<>();
+		for (SourceContainer s : packages) {
 			listClasses.addAll(s.getClasses());
 		}
-		
-		//calculateMetrics(listClasses);
-		
 
-		try {
-			dao.beginTransaction();
-			dao.getSession().save(project);
-			dao.commitTransation();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		dao.close();
+		// calculateMetrics(listClasses);
 
 		setExternalRef(packages);
+
+		STypeManager.save(project);
+
 		clearCache();
 		System.gc();
 	}
 
 	private void calculateMetrics(Set<SType> listClasses) {
-		for(SType st: listClasses){
+		for (SType st : listClasses) {
 			ClassMetricManager.C3(st);
 			ClassMetricManager.CBO(st);
 			ClassMetricManager.LCOM(st);
@@ -104,7 +94,7 @@ public class JavaExtractor implements CodeExtractor {
 			ClassMetricManager.WMC(st);
 			ClassMetricManager.RFC(st);
 			ClassMetricManager.WMC(st);
-			ClassMetricManager.NOA(st,listClasses);
+			ClassMetricManager.NOA(st, listClasses);
 			ClassMetricManager.NOC(st, listClasses);
 			ClassMetricManager.DIT(st, listClasses, 0);
 			ClassMetricManager.NOO(st, listClasses);
@@ -179,7 +169,7 @@ public class JavaExtractor implements CodeExtractor {
 					// Trova tutte le classi che invocano la classe in esame
 					getInvokedClass(cl);
 					for (Method mb : cl.getMethods()) {
-						// Trova tutti i metodi che invocano il meetodo in esame
+						// Trova tutti i metodi che invocano il metodo in esame
 						getInvokedMethods(mb);
 					}
 				}
@@ -195,10 +185,12 @@ public class JavaExtractor implements CodeExtractor {
 	 * @return Set delle classi invocate
 	 * */
 	private void getInvokedClass(SType cl) throws JavaModelException {
+
 		ClassSearchRequestor req = new ClassSearchRequestor(cl);
 		FullyQualifiedName fqn = new FullyQualifiedName(cl);
-		IJavaElement el = Finder.findCUbyName(fqn);
-		// Se el e' null significa che la classe contiene errori.
+		IJavaElement el = Finder.findCUbyName(fqn); // Se el e' null significa
+													// che la classe contiene
+													// errori.
 		if (el == null) {
 			return;
 		}
@@ -207,9 +199,9 @@ public class JavaExtractor implements CodeExtractor {
 			RefSearchEngine.searchInternalRef(el, req,
 					IJavaSearchConstants.CLASS);
 		} catch (CoreException e) {
-			// TODO gestire eccezione
-			e.printStackTrace();
+			// TODO gestire eccezione e.printStackTrace();
 		}
+
 	}
 
 	/**

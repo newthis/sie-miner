@@ -46,4 +46,13 @@ public class ProjectManager {
 		q.setParameter("name", name);
 		return q;
 	}
+
+	public static void save(Project project) {
+		DAOHibernate dao = DAOHibernate.getInstance();
+		Session s = dao.getSession();
+		s.save(project);
+		dao.beginTransaction();
+		dao.commitTransation();
+		dao.close();
+	}
 }

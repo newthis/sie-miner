@@ -1,21 +1,13 @@
 package sie.versioning.tests;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Collection;
-import java.util.Set;
-
-import org.hibernate.Session;
-
-import sie.db.DAOHibernate;
 import sie.db.entity.Change;
 import sie.db.entity.Project;
 import sie.versioning.UnixVersioningExtractorsFactory;
 import sie.versioning.VersioningExtractor;
 import sie.versioning.db.ChangeManager;
-import sie.versioning.db.JavaFIleFilter;
 
 public class GitTester {
 

@@ -2,6 +2,8 @@ package sie.db.entity;
 
 import java.util.Set;
 
+import sie.parser.utils.FullyQualifiedName;
+
 public class SType extends Import {
 	public SType() {
 		super();
@@ -159,11 +161,10 @@ public class SType extends Import {
 	public void setMetriche(Set<TypeMetric> metriche) {
 		this.metriche = metriche;
 	}
-	
+
 	@Override
 	public String toString() {
-		return super.toString() + "[belongingPackage = " + belongingPackage
-				+ ", isInterface= " + interf + "] ] ";
+		return new FullyQualifiedName(this).toString();
 	}
 
 	@Override
@@ -196,5 +197,5 @@ public class SType extends Import {
 	private String headerFile;
 	private String textContent;
 	private Set<TypeMetric> metriche;
-	
+
 }

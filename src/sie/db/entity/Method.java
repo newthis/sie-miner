@@ -2,6 +2,8 @@ package sie.db.entity;
 
 import java.util.Set;
 
+import sie.parser.utils.MethodFullyQualifiedName;
+
 public class Method {
 	public Method() {
 	}
@@ -29,20 +31,6 @@ public class Method {
 
 	public void setBelongingClass(SType belongingClass) {
 		this.belongingClass = belongingClass;
-	}
-
-	@Override
-	public String toString() {
-		return super.toString() + "[belongingClass = " + belongingClass + "]";
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == null || obj.getClass() != this.getClass()
-				|| !super.equals(obj))
-			return false;
-		Method mb = (Method) obj;
-		return mb.getBelongingClass().equals(belongingClass);
 	}
 
 	public Set<CodeComment> getComments() {
@@ -173,6 +161,20 @@ public class Method {
 		this.metriche = metriche;
 	}
 	
+	@Override
+	public String toString() {
+		return new MethodFullyQualifiedName(this).toString();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || obj.getClass() != this.getClass()
+				|| !super.equals(obj))
+			return false;
+		Method mb = (Method) obj;
+		return mb.getBelongingClass().equals(belongingClass);
+	}
+
 	private boolean constructor;
 	private SType belongingClass;
 	private String name;

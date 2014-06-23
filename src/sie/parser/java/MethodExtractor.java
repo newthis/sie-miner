@@ -81,10 +81,10 @@ public class MethodExtractor {
 
 		// Salva contenuto metodo
 		mb.setTextContent(pMethodNode.toString());
-		
+
 		// Salva contenuto metodo
 		mb.setReturnType(getReturnType(pMethodNode));
-	
+
 		cache.put(mfqn, mb, true);
 
 		return mb;

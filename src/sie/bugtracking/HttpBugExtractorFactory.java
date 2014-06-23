@@ -1,7 +1,5 @@
 package sie.bugtracking;
 
-import sie.versioning.VersioningExtractorFactory;
-
 /**
  * Questa classe implementa {@link HttpBugExtractorFactory}
  * 
