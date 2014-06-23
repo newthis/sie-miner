@@ -15,7 +15,6 @@ import org.junit.Test;
 
 import sie.bugtracking.BugExtractor;
 import sie.bugtracking.HttpBugExtractorFactory;
-import sie.db.entity.Change;
 import sie.db.entity.Issue;
 
 public class BugExtractorTest {

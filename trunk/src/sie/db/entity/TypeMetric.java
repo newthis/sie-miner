@@ -7,6 +7,16 @@ public class TypeMetric extends Metric{
 		this.acronimo=acronimo;
 	}
 	
+	public TypeMetric() {}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	/**
 	 * @return the acronimo
 	 */
@@ -28,6 +38,8 @@ public class TypeMetric extends Metric{
 	public void setValue(double value) {
 		this.value = value;
 	}
+	
+	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -50,7 +62,7 @@ public class TypeMetric extends Metric{
 	}
 
 
-
+	private int id;
 	private double value;
 	private SType type;
 	private String acronimo;

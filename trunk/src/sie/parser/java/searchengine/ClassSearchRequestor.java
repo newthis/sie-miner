@@ -1,11 +1,12 @@
 package sie.parser.java.searchengine;
 
+import java.util.HashSet;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.IImportDeclaration;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.search.SearchMatch;
 import org.eclipse.jdt.core.search.SearchRequestor;
-
 import sie.db.entity.SType;
 import sie.db.entity.SourceContainer;
 import sie.parser.cache.ClassCache;
@@ -49,12 +50,17 @@ public class ClassSearchRequestor extends SearchRequestor {
 			cb = new SType(new SourceContainer(pkg), clName);
 			ClassCache.getCache().put(fqn, cb, true);
 		}
-		if (target.getClassiInvocate() != null) {// TODO
-			if (!target.equals(cb) && !target.getClassiInvocate().contains(cb)) {
-				target.addInvocation(cb);
-				if (cb instanceof SType) {
-					cb.addExternalInvocation(target);
+		if (target.getClassiInvocate() == null) {
+			target.setClassiInvocate(new HashSet<SType>());
+		}
+
+		if (!target.equals(cb) && !target.getClassiInvocate().contains(cb)) {
+			target.addInvocation(cb);
+			if (cb instanceof SType) {
+				if (cb.getExternalRefToThis() == null) {
+					cb.setExternalRefToThis(new HashSet<SType>());
 				}
+				cb.addExternalInvocation(target);
 			}
 		}
 	}

@@ -30,8 +30,10 @@ USE `sie`;
 --
 
 CREATE TABLE IF NOT EXISTS `catched_exceptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `method` int(11) DEFAULT NULL,
   `exception_type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `method_id` (`method`),
   KEY `type_id` (`exception_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -85,19 +87,6 @@ CREATE TABLE IF NOT EXISTS `methods_change_in_commit` (
 -- --------------------------------------------------------
 
 --
--- Struttura della tabella `class_invocations`
---
-
-CREATE TABLE IF NOT EXISTS `class_invocations` (
-  `invoker_class` int(11) DEFAULT NULL,
-  `invoked_class` int(11) DEFAULT NULL,
-  KEY `invoker_class` (`invoker_class`),
-  KEY `invoked_class` (`invoked_class`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Struttura della tabella `comments`
 --
 
@@ -116,8 +105,10 @@ CREATE TABLE IF NOT EXISTS `comments` (
 --
 
 CREATE TABLE IF NOT EXISTS `extends` (
-  `subclass` int(10) DEFAULT NULL,
-  `superclass` int(10) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subclass` int(11) DEFAULT NULL,
+  `superclass` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `subclass` (`subclass`),
   KEY `superclass` (`superclass`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -146,8 +137,10 @@ CREATE TABLE IF NOT EXISTS `fields` (
 --
 
 CREATE TABLE IF NOT EXISTS `field_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `field` int(11) DEFAULT NULL,
   `comment` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `field_id` (`field`,`comment`),
   KEY `comments_id` (`comment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -161,7 +154,7 @@ CREATE TABLE IF NOT EXISTS `field_comments` (
 --
 
 CREATE TABLE IF NOT EXISTS `import` (
-  `id` int(100) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
@@ -173,8 +166,10 @@ CREATE TABLE IF NOT EXISTS `import` (
 --
 
 CREATE TABLE IF NOT EXISTS `imports` (
-  `importer` int(10) DEFAULT NULL,
-  `imported` int(10) DEFAULT NULL,
+  `id` int (11) NOT NULL AUTO_INCREMENT,
+  `importer` int(11) DEFAULT NULL,
+  `imported` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `importer` (`importer`),
   KEY `imported` (`imported`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -278,8 +273,10 @@ CREATE TABLE IF NOT EXISTS `methods` (
 --
 
 CREATE TABLE IF NOT EXISTS `method_comments` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `method` int(11) DEFAULT NULL,
   `comment` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `comment_id` (`comment`),
   KEY `method_id` (`method`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -291,8 +288,10 @@ CREATE TABLE IF NOT EXISTS `method_comments` (
 --
 
 CREATE TABLE IF NOT EXISTS `method_invocations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `invoker_method` int(11) DEFAULT NULL,
   `invoked_method` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `callee` (`invoked_method`),
   KEY `caller` (`invoker_method`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -304,7 +303,7 @@ CREATE TABLE IF NOT EXISTS `method_invocations` (
 --
 
 CREATE TABLE IF NOT EXISTS `metrics` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(20) DEFAULT NULL,
   `description` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -317,9 +316,11 @@ CREATE TABLE IF NOT EXISTS `metrics` (
 --
 
 CREATE TABLE IF NOT EXISTS `metrics_method` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `method` int(11) DEFAULT NULL,
   `metric` int(11) DEFAULT NULL,
   `value` double DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `method` (`method`),
   KEY `metric` (`metric`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -361,6 +362,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
 --
 
 CREATE TABLE IF NOT EXISTS `reviews` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `versioning_url` varchar(255) NOT NULL,
   `name_app` varchar(150) NOT NULL,
   `author` varchar(150) NOT NULL,
@@ -368,6 +370,7 @@ CREATE TABLE IF NOT EXISTS `reviews` (
   `review` varchar(800) NOT NULL,
   `rating` varchar(5) NOT NULL,
   `date` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`),
   UNIQUE KEY `name_app` (`name_app`,`author`,`date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -393,8 +396,10 @@ CREATE TABLE IF NOT EXISTS `source_containers` (
 --
 
 CREATE TABLE IF NOT EXISTS `throwed_exceptions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `method` int(11) DEFAULT NULL,
   `exception_type` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `method_id` (`method`),
   KEY `type_id` (`exception_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -424,9 +429,11 @@ CREATE TABLE IF NOT EXISTS `types` (
 --
 
 CREATE TABLE IF NOT EXISTS `types_metrics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` int(11) DEFAULT NULL,
   `metric` int(11) DEFAULT NULL,
   `value` double DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `type` (`type`),
   KEY `metric` (`metric`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -438,11 +445,13 @@ CREATE TABLE IF NOT EXISTS `types_metrics` (
 --
 
 CREATE TABLE IF NOT EXISTS `type_invocations` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `invoker_class` int(11) DEFAULT NULL,
   `invoked_class` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `caller` (`invoker_class`),
   KEY `callee` (`invoked_class`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -451,8 +460,10 @@ CREATE TABLE IF NOT EXISTS `type_invocations` (
 --
 
 CREATE TABLE IF NOT EXISTS `used_fields` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `method` int(11) DEFAULT NULL,
   `field_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
   KEY `method_id` (`method`,`field_id`),
   KEY `field_id` (`field_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -466,7 +477,7 @@ CREATE TABLE IF NOT EXISTS `used_fields` (
 --
 ALTER TABLE `catched_exceptions`
   ADD CONSTRAINT `catched_exc` FOREIGN KEY (`method`) REFERENCES `methods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `exc_catch` FOREIGN KEY (`exception_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `exc_catch` FOREIGN KEY (`exception_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `changes`
@@ -487,31 +498,24 @@ ALTER TABLE `methods_change_in_commit`
   ADD CONSTRAINT `prop_file_fk` FOREIGN KEY (`proprietary_file`) REFERENCES `changes_for_commit` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Limiti per la tabella `class_invocations`
---
-ALTER TABLE `class_invocations`
-  ADD CONSTRAINT `class_invocations_ibfk_2` FOREIGN KEY (`invoked_class`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `class_invocations_ibfk_1` FOREIGN KEY (`invoker_class`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
 -- Limiti per la tabella `comments`
 --
 ALTER TABLE `comments`
-  ADD CONSTRAINT `comment_type` FOREIGN KEY (`belonging_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `comment_type` FOREIGN KEY (`belonging_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `extends`
 --
 ALTER TABLE `extends`
-  ADD CONSTRAINT `extends_ibfk_2` FOREIGN KEY (`superclass`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `extends_ibfk_1` FOREIGN KEY (`subclass`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `extends_ibfk_2` FOREIGN KEY (`superclass`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `extends_ibfk_1` FOREIGN KEY (`subclass`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `fields`
 --
 ALTER TABLE `fields`
-  ADD CONSTRAINT `owner_type` FOREIGN KEY (`owner_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `field_type` FOREIGN KEY (`type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `owner_type` FOREIGN KEY (`owner_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `field_type` FOREIGN KEY (`type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `field_comments`
@@ -524,7 +528,7 @@ ALTER TABLE `field_comments`
 -- Limiti per la tabella `imports`
 --
 ALTER TABLE `imports`
-  ADD CONSTRAINT `imports_ibfk_2` FOREIGN KEY (`imported`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `imports_ibfk_2` FOREIGN KEY (`imported`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `imports_ibfk_1` FOREIGN KEY (`importer`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -549,15 +553,15 @@ ALTER TABLE `issue_comments`
 -- Limiti per la tabella `local_variables`
 --
 ALTER TABLE `local_variables`
-  ADD CONSTRAINT `method_var` FOREIGN KEY (`variable_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `method_var` FOREIGN KEY (`variable_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `var_method` FOREIGN KEY (`belonging_method`) REFERENCES `methods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `methods`
 --
 ALTER TABLE `methods`
-  ADD CONSTRAINT `methods_ibfk_2` FOREIGN KEY (`return_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `method_type` FOREIGN KEY (`belonging_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `methods_ibfk_2` FOREIGN KEY (`return_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `method_type` FOREIGN KEY (`belonging_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `method_comments`
@@ -584,7 +588,7 @@ ALTER TABLE `metrics_method`
 -- Limiti per la tabella `parameters`
 --
 ALTER TABLE `parameters`
-  ADD CONSTRAINT `method_parameter` FOREIGN KEY (`type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `method_parameter` FOREIGN KEY (`type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `parameter_method` FOREIGN KEY (`belonging_method`) REFERENCES `methods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -598,7 +602,7 @@ ALTER TABLE `source_containers`
 -- Limiti per la tabella `throwed_exceptions`
 --
 ALTER TABLE `throwed_exceptions`
-  ADD CONSTRAINT `exc_throw` FOREIGN KEY (`exception_type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `exc_throw` FOREIGN KEY (`exception_type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `throw_exc` FOREIGN KEY (`method`) REFERENCES `methods` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
@@ -612,15 +616,15 @@ ALTER TABLE `types`
 -- Limiti per la tabella `types_metrics`
 --
 ALTER TABLE `types_metrics`
-  ADD CONSTRAINT `types_metrics_ibfk_1` FOREIGN KEY (`type`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `types_metrics_ibfk_1` FOREIGN KEY (`type`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `types_metrics_ibfk_2` FOREIGN KEY (`metric`) REFERENCES `metrics` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `type_invocations`
 --
 ALTER TABLE `type_invocations`
-  ADD CONSTRAINT `callee_type` FOREIGN KEY (`invoked_class`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `caller_type` FOREIGN KEY (`invoker_class`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `callee_type` FOREIGN KEY (`invoked_class`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `caller_type` FOREIGN KEY (`invoker_class`) REFERENCES `import` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Limiti per la tabella `used_fields`

@@ -17,8 +17,6 @@
 		<property name="hbm2ddl.auto"> update </property>
 		<property name="hibernate.show_sql">false</property>
 		<property name="hibernate.format_sql">false</property>
-		<property name="hibernate."></property>
-
 		<property name="hibernate.query.substitutions">true 'Y', false 'N'</property>
 
 		<!-- "Import" the mapping resources here -->

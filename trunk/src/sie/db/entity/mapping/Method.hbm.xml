@@ -41,22 +41,6 @@
 			</many-to-many>
 		</set>
 
-		<!-- <set name="extRefToThis" table="method_invocations" inverse="true"
-			lazy="true" fetch="select">
-			<key column="invoker_method" />
-			<many-to-many entity-name="sie.db.entity.Method">
-				<column name="invoked_method" />
-			</many-to-many>
-		</set> -->
-
-		<set name="methodCalls" table="method_invocations" inverse="true"
-			lazy="true" fetch="select">
-			<key column="invoked_method" />
-			<many-to-many entity-name="sie.db.entity.Method">
-				<column name="invoker_method" />
-			</many-to-many>
-		</set>
-
 		<set name="parameters" table="parameters" inverse="true" lazy="true"
 			fetch="select">
 			<key>
